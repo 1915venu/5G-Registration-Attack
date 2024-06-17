@@ -1,45 +1,3 @@
-# 5G-Registration-Attack
-
-### README
-
-# Registration Time Analysis for UE using Pyshark
-
-This project contains a Python script that analyzes a pcap (packet capture) file to find out the time it takes for a User Equipment (UE) to register. The script uses the `pyshark` library to read the pcap file and `pandas` to process and store the results.
-
-## Prerequisites
-
-Ensure you have the following installed:
-- Python 3.x
-- `pyshark` library
-- `pandas` library
-- Wireshark (for capturing the pcap file)
-
-You can install the required Python libraries using pip:
-```sh
-pip install pyshark pandas
-```
-
-## Usage
-
-1. **Capture Network Traffic:**
-   - Use Wireshark or any other network capturing tool to capture the traffic and save it as a `.pcap` file.
-   
-2. **Place the pcap File:**
-   - Place the `.pcap` file in the same directory as the script or update the `pcap_file` path variable in the script.
-
-3. **Run the Script:**
-   - Execute the script to analyze the pcap file and calculate the registration times.
-   ```sh
-   python find_reg_time.py
-   ```
-
-## Script Details
-
-### `find_reg_time.py`
-
-This script processes the pcap file to calculate the time differences between the registration attempts of UEs. Below is the breakdown of the script:
-
-```python
 import pyshark
 import pandas as pd
 from collections import defaultdict
@@ -110,29 +68,3 @@ pcap_file = 'fifteenjun.pcap'
 
 # Analyze the pcap file
 analyze_pcap(pcap_file)
-```
-
-### Output
-
-The script generates a CSV file (`time_differences.csv`) containing the maximum time differences for each RAN_UE_NGAP_ID.
-
-### CSV File Structure
-The CSV file contains the following columns:
-- `RAN_UE_NGAP_ID`: The unique identifier for the UE.
-- `Max_Time_Difference`: The maximum time difference (in seconds) between registration attempts for the corresponding UE.
-
-## Troubleshooting
-
-- Ensure the pcap file contains NGAP packets with `RAN_UE_NGAP_ID` fields.
-- Check for dependencies and install missing libraries using pip.
-
-
-
-
-
-## Author
-
-- [Anurag K Sharma]
-- mcs222071
-
-Feel free to reach out if you have any questions or need further assistance.
