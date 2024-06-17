@@ -114,7 +114,7 @@ analyze_pcap(pcap_file)
 
 ### Output
 
-The script generates a CSV file (`time_differences_ninejun.csv`) containing the maximum time differences for each RAN_UE_NGAP_ID.
+The script generates a CSV file (`time_differences.csv`) containing the maximum time differences for each RAN_UE_NGAP_ID.
 
 ### CSV File Structure
 The CSV file contains the following columns:
@@ -125,6 +125,8 @@ The CSV file contains the following columns:
 
 - Ensure the pcap file contains NGAP packets with `RAN_UE_NGAP_ID` fields.
 - Check for dependencies and install missing libraries using pip.
+
+
 
 
 
