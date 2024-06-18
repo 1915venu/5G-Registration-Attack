@@ -1,0 +1,44 @@
+gnodeb:
+  controlif:
+    ip: "192.168.56.121"
+    port: 9487
+  dataif:
+    ip: "192.168.56.121"
+    port: 2152
+  plmnlist:
+    mcc: "999"
+    mnc: "70"
+    tac: "000001"
+    gnbid: "000008"
+  slicesupportlist:
+    sst: "01"
+    # sd: "111111" # optional, can be removed if not used
+ue:
+  msin: "0000000500"
+  key: "465B5CE8B199B49FAA5F0A2EE238A6BC"
+  opc: "E8ED289DEBA952E4283B54E88E6183CA"
+  amf: "8000"
+  sqn: "00000000"
+  dnn: "internet"
+  routingindicator: "0000"
+  hplmn:
+    mcc: "999"
+    mnc: "70"
+  snssai:
+    sst: 1
+    # sd: "111111" # optional, can be removed if not used
+  integrity:
+    nia0: false
+    nia1: true
+    nia2: true
+    nia3: true
+  ciphering:
+    nea0: false
+    nea1: true
+    nea2: true
+    nea3: true
+amfif:
+  - ip: "192.168.56.100"
+    port: 38412
+logs:
+  level: 4
