@@ -63,7 +63,7 @@ def setup_sctp_connection():
 sudo ip addr add 192.168.56.100/24 dev eth1
 ```
 
-- <u>_Note-2:_</u> Ensure that your `AMF` is configured to receive `NGA`P`messages over`SCTP` at the specified port, as shown below:
+- <u>_Note-2:_</u> Ensure that your `AMF` is configured to receive `NGAP` messages over`SCTP` at the specified port, as shown below:
 
 ```
 amf:
@@ -79,7 +79,7 @@ amf:
   ngap:
     server:
       - address: 192.168.56.3
-        port: 9001              # Ensure that this port is explicitly, if unspecified
+        port: 9001              # Ensure that this port is added explicitly, if unspecified
 ```
 
 - Finally, you can execute the scripts as:
@@ -91,6 +91,6 @@ python3 trigger_auth.py
 
 ## Author & Contributors
 
-- Prateek Bhaisora _(2023JCS2564)_
-- IIT Delhi: ([spring-iitd](https://github.com/spring-iitd))
-- GitHub: [prateekbhaisora](https://github.com/prateekbhaisora)
+> Prateek Bhaisora _(2023JCS2564)_ <br>
+IIT Delhi SPRING Group ([spring-iitd](https://github.com/spring-iitd)) <br>
+GitHub Profile Link: [prateekbhaisora](https://github.com/prateekbhaisora)
