@@ -1,0 +1,9 @@
+# Ignore gNB dunder pycache
+./custom-packet-scripts/procedures/trigger_auth/gnb/nas_utils/__pycache__
+./custom-packet-scripts/procedures/trigger_auth/gnb/ngap_utils/__pycache__
+./custom-packet-scripts/procedures/trigger_auth/gnb/shared_utils/__pycache__
+
+# Ignore UE dunder pycache
+./custom-packet-scripts/procedures/trigger_auth/ue/rls_utils/__pycache__
+./custom-packet-scripts/procedures/trigger_auth/ue/rrc_utils/__pycache__
+./custom-packet-scripts/procedures/trigger_auth/ue/shared_utils/__pycache__

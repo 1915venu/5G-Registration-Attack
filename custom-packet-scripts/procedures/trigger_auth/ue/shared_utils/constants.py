@@ -1,0 +1,9 @@
+SRC_UE_IP = "192.168.58.101"    
+SRC_UE_PORT = 55863
+
+DST_GNB_IP = "192.168.58.101"  
+DST_GNB_PORT = 4997
+
+MAX_LIMIT = (2**39) - 1 
+
+SEPARATOR = "\n" + "-" * 75 + "\n"

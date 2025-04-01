@@ -1,0 +1,13 @@
+SEPARATOR = "\n" + "-" * 75 + "\n"
+
+# SRC_IP = "127.0.0.1"  
+# SRC_PORT = 51288
+
+# DST_IP = "127.0.0.1"
+# DST_PORT = 38412
+
+SRC_IP = "192.168.58.100"  
+SRC_PORT = 51288
+
+DST_IP = "192.168.58.100"
+DST_PORT = 9001
