@@ -47,7 +47,6 @@ def send_ngap_pdu(ng_setup_req):
         print("Sent NG Setup Request message to the server \n")
         
         response, ancdata, flags, addr = sock.sctp_recv(2048)
-        print(f"Received SCTP response from {addr}: {response.hex()} \n")
 
     except Exception as e:
         print(f"Failed to connect or send message: {e} \n")
