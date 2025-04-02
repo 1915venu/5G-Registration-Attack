@@ -1,6 +1,6 @@
-# Triggering Authentication inside Core Network using custom NGAP Packets
+# Sending custom NGAP, RRC and NAS Packets
 
-This part of the repository contains code that can be used to send customized NGAP and RRC messages. It leverages [pycrate](https://github.com/pycrate-org/pycrate) and [pysctp](https://github.com/P1sec/pysctp) libraries of python to achieve this functionality.
+This part of the repository contains code that can be used to send customized `NGAP`, `RRC` and `NAS` messages. It leverages [pycrate](https://github.com/pycrate-org/pycrate) and [pysctp](https://github.com/P1sec/pysctp) libraries of python to achieve this functionality.
 
 ## How to setup this Project?
 
@@ -44,10 +44,10 @@ cd ../
 
 ## Usage
 
-Once the project is set up, you can use the various scripts provided to perform your simulations. A handy `README.md` file is attached in each sub-directory of this repository, to familiarize you with the setup and usage of various packages.****
+Once the project is set up, you can use the various scripts provided to perform your simulations. A handy `README.md` file is attached in each sub-directory of this repository, to familiarize you with the setup and usage of various packages.s
 
 ## Author & Contributors
 
 > Prateek Bhaisora _(2023JCS2564)_ <br>
-IIT Delhi SPRING Group ([spring-iitd](https://github.com/spring-iitd)) <br>
-GitHub Profile Link: [prateekbhaisora](https://github.com/prateekbhaisora)
+> IIT Delhi SPRING Group ([spring-iitd](https://github.com/spring-iitd)) <br>
+> GitHub Profile Link: [prateekbhaisora](https://github.com/prateekbhaisora)
