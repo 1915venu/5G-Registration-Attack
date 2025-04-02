@@ -6,9 +6,9 @@ This part of the repository contains code that can be used to send customized NG
 
 > <u>**Pre-requisites:**</u>
 
-- Pip3 and Python3.5 _(or, greater)_ installed on your system. For this setup, we will use Python 3.10.12.
+- pip3 and python3.5 _(or, greater)_ installed on your system. For this setup, we will use python 3.10.12.
 
-- A successfully running core network simulator (e.g. Open5GS), already set-up on your host machine. For IITD students, please refer [here](https://github.com/spring-iitd/Cellular-Security) for simulator setup.
+- A successfully running core network simulator (preferrably [Open5GS](https://github.com/open5gs/open5gs)) and a radio access network simulator (preferrably [UERANSIM](https://github.com/aligungr/UERANSIM)), already set-up on your host machine. For IITD students, please refer [here](https://github.com/spring-iitd/Cellular-Security) for simulator setup.
 
 1. To clone this repository into the `~/shared/` directory, run the following commands:
 
@@ -44,50 +44,7 @@ cd ../
 
 ## Usage
 
-Once the project is set up, you can use the various scripts provided to perform your simulations.
-
-- e.g. Set up the correct source and destination IP and Port in the `5G-Registration-Attack/custom-packet-scripts/procedures/trigger_auth.py` in the following part of the code:
-
-```py
-def setup_sctp_connection():
-    SOURCE_IP = "192.168.56.100"    # Script IP
-    SOURCE_PORT = 51288             # Script Port
-
-    DEST_IP = "192.168.56.3"        # AMF IP
-    DEST_PORT = 9001                # AMF Port
-```
-
-- <u>_Note-1:_</u> Ensure that your source and destination IP belong to the same interface. You can manually assign an additional IP to an existing interface as:
-
-```sh
-sudo ip addr add 192.168.56.100/24 dev eth1
-```
-
-- <u>_Note-2:_</u> Ensure that your `AMF` is configured to receive `NGAP` messages over`SCTP` at the specified port, as shown below:
-
-```
-amf:
-  sbi:
-    server:
-      - address: 127.0.0.5
-        port: 7777
-    client:
-#      nrf:
-#        - uri: http://127.0.0.10:7777
-      scp:
-        - uri: http://127.0.0.200:7777
-  ngap:
-    server:
-      - address: 192.168.56.3
-        port: 9001              # Ensure that this port is added explicitly, if unspecified
-```
-
-- Finally, you can execute the scripts as:
-
-```sh
-cd procedures
-python3 trigger_auth.py
-```
+Once the project is set up, you can use the various scripts provided to perform your simulations. A handy `README.md` file is attached in each sub-directory of this repository, to familiarize you with the setup and usage of various packages.****
 
 ## Author & Contributors
 
