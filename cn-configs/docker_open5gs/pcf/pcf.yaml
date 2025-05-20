@@ -1,0 +1,41 @@
+db_uri: mongodb://MONGO_IP/open5gs
+
+logger:
+  file:
+    path: /open5gs/install/var/log/open5gs/pcf.log
+
+sbi:
+  server:
+    no_tls: false
+  client:
+    no_tls: false
+
+global:
+  max:
+    ue: MAX_NUM_UE
+
+pcf:
+  default:
+    tls:
+      server:
+        scheme: https
+        private_key: /open5gs/install/etc/open5gs/tls/pcf.key
+        cert: /open5gs/install/etc/open5gs/tls/pcf.crt
+        verify_client: true
+        verify_client_cacert: /open5gs/install/etc/open5gs/tls/ca.crt
+      client:
+        scheme: https
+        cacert: /open5gs/install/etc/open5gs/tls/ca.crt
+        client_private_key: /open5gs/install/etc/open5gs/tls/pcf.key
+        client_cert: /open5gs/install/etc/open5gs/tls/pcf.crt
+  sbi:
+    server:
+      - address: pcf.localdomain
+        port: 443
+    client:
+      nrf:
+        - uri: https://nrf.localdomain:443
+  metrics:
+    server:
+      - address: PCF_IP
+        port: 9091

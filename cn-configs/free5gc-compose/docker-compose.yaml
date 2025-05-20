@@ -1,0 +1,378 @@
+services:
+  free5gc-upf:
+    container_name: upf
+    image: free5gc/upf:v4.0.1
+    command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
+    env_file:
+      - .env
+    volumes:
+      - ./config/upfcfg.yaml:/free5gc/config/upfcfg.yaml
+      - ./config/upf-iptables.sh:/free5gc/upf-iptables.sh
+    expose:
+      - "2152/udp"
+      - "8805/udp"
+      - "9091/tcp"
+    ports:
+      - "2152:2152/udp"
+    cap_add:
+      - NET_ADMIN
+    networks:
+      default:
+        ipv4_address: ${UPF_IP}
+        aliases:
+          - upf.free5gc.org
+
+  db:
+    container_name: mongodb
+    image: mongo:3.6.8
+    command: mongod --port 27017
+    expose:
+      - "27017"
+    volumes:
+      - dbdata:/data/db
+    networks:
+      default:
+        ipv4_address: ${MONGO_IP}
+        aliases:
+          - db
+
+  free5gc-nrf:
+    container_name: nrf
+    image: free5gc/nrf:v4.0.1
+    command: ./nrf -c ./config/nrfcfg.yaml
+    env_file:
+      - .env
+    expose:
+      - "8000"
+    volumes:
+      - ./config/nrfcfg.yaml:/free5gc/config/nrfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      DB_URI: mongodb://db/free5gc
+      GIN_MODE: release
+    networks:
+      default:
+        ipv4_address: ${NRF_IP}
+        aliases:
+          - nrf.free5gc.org
+    depends_on:
+      - db
+
+  free5gc-amf:
+    container_name: amf
+    image: free5gc/amf:v4.0.1
+    command: ./amf -c ./config/amfcfg.yaml
+    env_file:
+      - .env
+    expose:
+      - "8000"
+      - "38412/sctp"
+      - "7777/tcp"
+      - "9091/tcp"
+    ports:
+      - "38412:38412/sctp"
+    volumes:
+      - ./config/amfcfg.yaml:/free5gc/config/amfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      default:
+        ipv4_address: ${AMF_IP}
+        aliases:
+          - amf.free5gc.org
+    depends_on:
+      - free5gc-nrf
+
+  free5gc-ausf:
+    container_name: ausf
+    image: free5gc/ausf:v4.0.1
+    command: ./ausf -c ./config/ausfcfg.yaml
+    env_file:
+      - .env
+    expose:
+      - "8000"
+      - "7777/tcp"
+    volumes:
+      - ./config/ausfcfg.yaml:/free5gc/config/ausfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      default:
+        ipv4_address: ${AUSF_IP}
+        aliases:
+          - ausf.free5gc.org
+    depends_on:
+      - free5gc-nrf
+
+  free5gc-nssf:
+    container_name: nssf
+    image: free5gc/nssf:v4.0.1
+    command: ./nssf -c ./config/nssfcfg.yaml
+    env_file:
+      - .env
+    expose:
+      - "8000"
+      - "7777/tcp"
+    volumes:
+      - ./config/nssfcfg.yaml:/free5gc/config/nssfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      default:
+        ipv4_address: ${NSSF_IP}
+        aliases:
+          - nssf.free5gc.org
+    depends_on:
+      - free5gc-nrf
+
+  free5gc-pcf:
+    container_name: pcf
+    image: free5gc/pcf:v4.0.1
+    command: ./pcf -c ./config/pcfcfg.yaml
+    env_file:
+      - .env
+    expose:
+      - "8000"
+    volumes:
+      - ./config/pcfcfg.yaml:/free5gc/config/pcfcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      default:
+        ipv4_address: ${PCF_IP}
+        aliases:
+          - pcf.free5gc.org
+    depends_on:
+      - free5gc-nrf
+
+  free5gc-smf:
+    container_name: smf
+    image: free5gc/smf:v4.0.1
+    command: ./smf -c ./config/smfcfg.yaml -u ./config/uerouting.yaml
+    env_file:
+      - .env
+    expose:
+      - "8000"
+      - "3868/udp"
+      - "3868/tcp"
+      - "3868/sctp"
+      - "5868/udp"
+      - "5868/tcp"
+      - "5868/sctp"
+      - "8805/udp"
+      - "2123/udp"
+      - "7777/tcp"
+      - "9091/tcp"
+    volumes:
+      - ./config/smfcfg.yaml:/free5gc/config/smfcfg.yaml
+      - ./config/uerouting.yaml:/free5gc/config/uerouting.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      default:
+        ipv4_address: ${SMF_IP}
+        aliases:
+          - smf.free5gc.org
+    depends_on:
+      - free5gc-nrf
+      - free5gc-upf
+
+  free5gc-udm:
+    container_name: udm
+    image: free5gc/udm:v4.0.1
+    command: ./udm -c ./config/udmcfg.yaml
+    env_file:
+      - .env
+    expose:
+      - "8000"
+    volumes:
+      - ./config/udmcfg.yaml:/free5gc/config/udmcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      GIN_MODE: release
+    networks:
+      default:
+        ipv4_address: ${UDM_IP}
+        aliases:
+          - udm.free5gc.org
+    depends_on:
+      - db
+      - free5gc-nrf
+
+  free5gc-udr:
+    container_name: udr
+    image: free5gc/udr:v4.0.1
+    command: ./udr -c ./config/udrcfg.yaml
+    env_file:
+      - .env
+    expose:
+      - "8000"
+      - "7777/tcp"
+    volumes:
+      - ./config/udrcfg.yaml:/free5gc/config/udrcfg.yaml
+      - ./cert:/free5gc/cert
+    environment:
+      DB_URI: mongodb://db/free5gc
+      GIN_MODE: release
+    networks:
+      default:
+        ipv4_address: ${UDR_IP}
+        aliases:
+          - udr.free5gc.org
+    depends_on:
+      - db
+      - free5gc-nrf
+
+  free5gc-webui:
+    container_name: webui
+    image: free5gc/webui:v4.0.1
+    command: ./webui -c ./config/webuicfg.yaml
+    env_file:
+      - .env
+    expose:
+      - "2121"
+    volumes:
+      - ./config/webuicfg.yaml:/free5gc/config/webuicfg.yaml
+    environment:
+      - GIN_MODE=release
+    networks:
+      default:
+        ipv4_address: ${WEBUI_IP}
+        aliases:
+          - webui
+    ports:
+      - "5000:5000"
+      - "2122:2122"
+      - "2121:2121"
+    depends_on:
+      - db
+      - free5gc-nrf
+
+  # free5gc-chf:
+  #   container_name: chf
+  #   image: free5gc/chf:v4.0.1
+  #   command: ./chf -c ./config/chfcfg.yaml
+  #   expose:
+  #     - "8000"
+  #   volumes:
+  #     - ./config/chfcfg.yaml:/free5gc/config/chfcfg.yaml
+  #     - ./cert:/free5gc/cert
+  #   environment:
+  #     DB_URI: mongodb://db/free5gc
+  #     GIN_MODE: release
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - chf.free5gc.org
+  #   depends_on:
+  #     - db
+  #     - free5gc-nrf
+  #     - free5gc-webui
+
+  # free5gc-n3iwf:
+  #   container_name: n3iwf
+  #   image: free5gc/n3iwf:v4.0.1
+  #   command: ./n3iwf -c ./config/n3iwfcfg.yaml
+  #   volumes:
+  #     - ./config/n3iwfcfg.yaml:/free5gc/config/n3iwfcfg.yaml
+  #     - ./config/n3iwf-ipsec.sh:/free5gc/n3iwf-ipsec.sh
+  #   environment:
+  #     GIN_MODE: release
+  #   cap_add:
+  #     - NET_ADMIN
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - n3iwf.free5gc.org
+  #   depends_on:
+  #     - free5gc-amf
+  #     - free5gc-smf
+  #     - free5gc-upf
+
+  # free5gc-tngf:
+  #   container_name: tngf
+  #   image: free5gc/tngf:latest
+  #   command: ./tngf -c ./config/tngfcfg.yaml
+  #   volumes:
+  #     - ./config/tngfcfg.yaml:/free5gc/config/tngfcfg.yaml
+  #     - ./cert:/free5gc/cert
+  #   environment:
+  #     GIN_MODE: release
+  #   cap_add:
+  #     - NET_ADMIN
+  #   network_mode: host
+  #   depends_on:
+  #     - free5gc-amf
+  #     - free5gc-smf
+  #     - free5gc-upf
+
+  # free5gc-nef:
+  #   container_name: nef
+  #   image: free5gc/nef:latest
+  #   command: ./nef -c ./config/nefcfg.yaml
+  #   expose:
+  #     - "8000"
+  #   volumes:
+  #     - ./config/nefcfg.yaml:/free5gc/config/nefcfg.yaml
+  #     - ./cert:/free5gc/cert
+  #   environment:
+  #     GIN_MODE: release
+  #   networks:
+  #     default:
+  #       aliases:
+  #         - nef.free5gc.org
+  #   depends_on:
+  #     - db
+  #     - free5gc-nrf
+
+  #   ueransim:
+  #     container_name: ueransim
+  #     image: free5gc/ueransim:latest
+  #     command: ./nr-gnb -c ./config/gnbcfg.yaml
+  #     volumes:
+  #       - ./config/gnbcfg.yaml:/ueransim/config/gnbcfg.yaml
+  #       - ./config/uecfg.yaml:/ueransim/config/uecfg.yaml
+  #     cap_add:
+  #       - NET_ADMIN
+  #     devices:
+  #       - "/dev/net/tun"
+  #     networks:
+  #       default:
+  #         aliases:
+  #           - gnb.free5gc.org
+  #     depends_on:
+  #       - free5gc-amf
+  #       - free5gc-upf
+
+  # n3iwue:
+  #   container_name: n3iwue
+  #   image: free5gc/n3iwue:latest
+  #   command: bash -c "ip route del default && ip route add default via 10.100.200.1 dev eth0 metric 203 && sleep infinity"
+  #   volumes:
+  #     - ./config/n3uecfg.yaml:/n3iwue/config/n3ue.yaml
+  #   cap_add:
+  #     - NET_ADMIN
+  #   devices:
+  #     - "/dev/net/tun"
+  #   networks:
+  #     default:
+  #       ipv4_address: 172.100.200.203
+  #       aliases:
+  #         - n3ue.free5gc.org
+  #   depends_on:
+  #     - free5gc-n3iwf
+
+networks:
+  default:
+    name: docker_open5gs_default
+    ipam:
+      config:
+        - subnet: ${TEST_NETWORK}
+
+volumes:
+  dbdata:

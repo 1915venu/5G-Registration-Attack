@@ -1,0 +1,36 @@
+logger:
+  file:
+    path: /open5gs/install/var/log/open5gs/nrf.log
+
+sbi:
+  server:
+    no_tls: false
+  client:
+    no_tls: false
+
+global:
+  max:
+    ue: MAX_NUM_UE
+
+nrf:
+  default:
+    tls:
+      server:
+        scheme: https
+        private_key: /open5gs/install/etc/open5gs/tls/nrf.key
+        cert: /open5gs/install/etc/open5gs/tls/nrf.crt
+        verify_client: true
+        verify_client_cacert: /open5gs/install/etc/open5gs/tls/ca.crt
+      client:
+        scheme: https
+        cacert: /open5gs/install/etc/open5gs/tls/ca.crt
+        client_private_key: /open5gs/install/etc/open5gs/tls/nrf.key
+        client_cert: /open5gs/install/etc/open5gs/tls/nrf.crt
+  serving: # 5G roaming requires PLMN in NRF
+    - plmn_id:
+        mcc: MCC
+        mnc: MNC
+  sbi:
+    server:
+      - address: nrf.localdomain
+        port: 443
