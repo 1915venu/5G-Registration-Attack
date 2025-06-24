@@ -1,14 +1,10 @@
-# version: '3'
-# name: reg_attack
 services:
   nr_gnb:
     image: docker_ueransim
     container_name: nr_gnb
-    # command: sleep infinity
     env_file:
       - ../.env
     stdin_open: true
-    # tty: true
     volumes:
       - ../multi-gnb:/mnt/multi-gnb
       - ./ueransim_image_init.sh:/ueransim_image_init.sh
@@ -30,5 +26,5 @@ services:
     # cpus: 1.0
 networks:
   default:
-    name: docker_open5gs_default
+    name: 5g-bridge
     external: true

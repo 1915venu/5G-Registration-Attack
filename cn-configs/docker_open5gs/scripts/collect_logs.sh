@@ -30,8 +30,6 @@ docker cp ../ueransim/ueransim_image_init.sh nr_ue:/ueransim_image_init.sh
 docker exec -it nr_ue bash -c "/ueransim_image_init.sh"
 sleep 2s
 
-# docker container ls
-
 for name in $(docker container ls --format '{{.Names}}'); do
     echo "Collecting logs for $name..." 
     echo "Collecting logs for $name..." >> $OUTPUT_FILENAME 2>&1

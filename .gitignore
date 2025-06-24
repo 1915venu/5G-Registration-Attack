@@ -7,3 +7,35 @@
 ./custom-packet-scripts/procedures/trigger_auth/ue/rls_utils/__pycache__
 ./custom-packet-scripts/procedures/trigger_auth/ue/rrc_utils/__pycache__
 ./custom-packet-scripts/procedures/trigger_auth/ue/shared_utils/__pycache__
+
+# docker_open5gs
+
+./cn-configs/docker_open5gs/py_3.12.3
+./cn-configs/docker_open5gs/log*
+
+# free5gc-compose
+./cn-configs/free5gc-compose/.vscode
+./cn-configs/free5gc-compose/base/free5gc
+
+# oai-cn5g-fed
+./cn-configs/oai-cn5g-fed/archives/
+./cn-configs/oai-cn5g-fed/DS-TEST-RESULTS/
+./cn-configs/oai-cn5g-fed/ci-scripts/mysql-complete.cmd
+./cn-configs/oai-cn5g-fed/ci-scripts/temp/ci-*.sh
+./cn-configs/oai-cn5g-fed/deploy_results_oai_cn5g.html
+./cn-configs/oai-cn5g-fed/ds_tester_results_oai_cn5g.html
+./cn-configs/oai-cn5g-fed/cn5g_fed_docker_logs.zip
+./cn-configs/oai-cn5g-fed/charts/oai-5g-core/oai-5g-mini/Chart.lock
+./cn-configs/oai-cn5g-fed/charts/oai-5g-core/oai-5g-mini/charts/
+./cn-configs/oai-cn5g-fed/charts/oai-5g-core/oai-5g-basic/Chart.lock
+./cn-configs/oai-cn5g-fed/charts/oai-5g-core/oai-5g-basic/charts/
+./cn-configs/oai-cn5g-fed/charts/oai-5g-core/oai-5g-advance/Chart.lock
+./cn-configs/oai-cn5g-fed/charts/oai-5g-core/oai-5g-advance/charts/
+./cn-configs/oai-cn5g-fed/charts/e2e_scenarios/case1/Chart.lock
+./cn-configs/oai-cn5g-fed/charts/e2e_scenarios/case1/charts/
+./cn-configs/oai-cn5g-fed/charts/e2e_scenarios/case2/Chart.lock
+./cn-configs/oai-cn5g-fed/charts/e2e_scenarios/case2/charts/
+./cn-configs/oai-cn5g-fed/charts/e2e_scenarios/case3/Chart.lock
+./cn-configs/oai-cn5g-fed/charts/e2e_scenarios/case3/charts/
+
+

@@ -1,12 +1,11 @@
 #!/bin/bash
 
-# docker cp webui:/open5gs/misc/db/open5gs-dbctl ./
 docker cp ./open5gs-dbctl  mongo:/bin/
 
 read -p "Enter the number of users you want to add: " NUM_USERS
 
-SUBSCRIBER_KEY=8baf473f2f8fd09487cccbd7097c6862
-OPERATOR_KEY=11111111111111111111111111111111
+SUBSCRIBER_KEY=465B5CE8B199B49FAA5F0A2EE238A6BC
+OPERATOR_KEY=E8ED289DEBA952E4283B54E88E6183CA
 
 for (( i=1; i<=NUM_USERS; i++ ))
 do
@@ -20,5 +19,3 @@ do
         sudo docker exec -i mongo /bin/open5gs-dbctl add $SUPI $SUBSCRIBER_KEY $OPERATOR_KEY
     fi
 done
-
-# rm -rf ./open5gs-dbctl

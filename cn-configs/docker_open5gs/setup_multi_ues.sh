@@ -37,7 +37,6 @@ function modify_compose_file() {
 
     sed -i "s/^ *container_name: .*/    container_name: nr_ue${i}/" "nr-ue${i}.yaml"
     sed -i "s/^ *- COMPONENT_NAME=.*/      - COMPONENT_NAME=ueransim-ue${i}/" "nr-ue${i}.yaml"
-    # sed -i "s/^ *ipv4_address: .*/        ipv4_address: \${NR_UE_${i}_IP}/" "nr-ue${i}.yaml"
     sed -i "s/^ *ipv4_address: .*/        ipv4_address: 172.22.0.$((62 + i))/" "nr-ue${i}.yaml"
 }
 

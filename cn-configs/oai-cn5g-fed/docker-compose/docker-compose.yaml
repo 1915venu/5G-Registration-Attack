@@ -1,0 +1,205 @@
+services:
+  mysql:
+    container_name: "mysql"
+    image: mysql:8.0
+    env_file:
+      - .env
+    volumes:
+      - ./database/oai_db2.sql:/docker-entrypoint-initdb.d/oai_db.sql
+      - ./healthscripts/mysql-healthcheck2.sh:/tmp/mysql-healthcheck.sh
+    environment:
+      - TZ=Europe/Paris
+      - MYSQL_DATABASE=oai_db
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+      - MYSQL_ROOT_PASSWORD=linux
+    healthcheck:
+      test: /bin/bash -c "/tmp/mysql-healthcheck.sh"
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks:
+      default:
+        ipv4_address: ${MYSQL_IP}
+        aliases:
+          - mysql.localdomain
+
+  oai-nrf:
+    container_name: "oai-nrf"
+    image: oaisoftwarealliance/oai-nrf:latest
+    env_file:
+      - .env
+    expose:
+      - 80/tcp
+      - 8080/tcp
+    volumes:
+      - ./conf/basic_config.yaml:/openair-nrf/etc/config.yaml
+    environment:
+      - TZ=Europe/Paris
+    networks:
+      default:
+        ipv4_address: ${NRF_IP}
+        aliases:
+          - nrf.localdomain
+
+  oai-udr:
+    container_name: "oai-udr"
+    image: oaisoftwarealliance/oai-udr:latest
+    env_file:
+      - .env
+    expose:
+      - 80/tcp
+      - 8080/tcp
+    volumes:
+      - ./conf/basic_config.yaml:/openair-udr/etc/config.yaml
+    environment:
+      - TZ=Europe/Paris
+    depends_on:
+      - mysql
+      - oai-nrf
+    networks:
+      default:
+        ipv4_address: ${UDR_IP}
+        aliases:
+          - udr.localdomain
+
+  oai-udm:
+    container_name: "oai-udm"
+    image: oaisoftwarealliance/oai-udm:latest
+    env_file:
+      - .env
+    expose:
+      - 80/tcp
+      - 8080/tcp
+    volumes:
+      - ./conf/basic_config.yaml:/openair-udm/etc/config.yaml
+    environment:
+      - TZ=Europe/Paris
+    depends_on:
+      - oai-nrf
+    networks:
+      default:
+        ipv4_address: ${UDM_IP}
+        aliases:
+          - udm.localdomain
+
+  oai-ausf:
+    container_name: "oai-ausf"
+    image: oaisoftwarealliance/oai-ausf:latest
+    env_file:
+      - .env
+    expose:
+      - 80/tcp
+      - 8080/tcp
+    volumes:
+      - ./conf/basic_config.yaml:/openair-ausf/etc/config.yaml
+    environment:
+      - TZ=Europe/Paris
+    depends_on:
+      - oai-nrf
+    networks:
+      default:
+        ipv4_address: ${AUSF_IP}
+        aliases:
+          - ausf.localdomain
+
+  oai-amf:
+    container_name: "oai-amf"
+    image: oaisoftwarealliance/oai-amf:latest
+    env_file:
+      - .env
+    expose:
+      - 80/tcp
+      - 8080/tcp
+      - 38412/sctp
+    volumes:
+      - ./conf/basic_config.yaml:/openair-amf/etc/config.yaml
+    environment:
+      - TZ=Europe/Paris
+    depends_on:
+      - oai-nrf
+    networks:
+      default:
+        ipv4_address: ${AMF_IP}
+        aliases:
+          - amf.localdomain
+
+  oai-smf:
+    container_name: "oai-smf"
+    image: oaisoftwarealliance/oai-smf:latest
+    env_file:
+      - .env
+    expose:
+      - 80/tcp
+      - 8080/tcp
+      - 8805/udp
+    volumes:
+      - ./conf/basic_config.yaml:/openair-smf/etc/config.yaml
+    environment:
+      - TZ=Europe/Paris
+    depends_on:
+      - oai-nrf
+    networks:
+      default:
+        ipv4_address: ${SMF_IP}
+        aliases:
+          - smf.localdomain
+
+  oai-upf:
+    container_name: "oai-upf"
+    image: oaisoftwarealliance/oai-upf:latest
+    env_file:
+      - .env
+    expose:
+      - 2152/udp
+      - 8805/udp
+    volumes:
+      - ./conf/basic_config.yaml:/openair-upf/etc/config.yaml
+    environment:
+      - TZ=Europe/Paris
+    depends_on:
+      - oai-nrf
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    cap_drop:
+      - ALL
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${UPF_IP}
+        aliases:
+          - upf.localdomain
+
+  oai-ext-dn:
+    privileged: true
+    init: true
+    container_name: oai-ext-dn
+    image: oaisoftwarealliance/trf-gen-cn5g:latest
+    env_file:
+      - .env
+    environment:
+      - UPF_FQDN=oai-upf
+      - UE_NETWORK=12.1.1.0/24
+      - USE_FQDN=yes
+    healthcheck:
+      test: /bin/bash -c "ip r | grep 12.1.1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      default:
+        ipv4_address: ${UE_IPV4_INTERNET}
+        aliases:
+          - dnn.localdomain
+
+networks:
+  default:
+    external: true
+    driver: bridge
+    name: 5g-bridge
+    ipam:
+      config:
+        - subnet: ${TEST_NETWORK}
+    driver_opts:
+      com.docker.network.bridge.name: "5g-bridge"

@@ -57,7 +57,7 @@ if [ "$1" = "add" ]; then
     if [ "$#" -eq 4 ]; then
         IMSI=$2
         KI=$3
-        OP=$4
+        OPC=$4
 
         mongosh --eval "db.subscribers.insertOne(
             {
@@ -107,8 +107,8 @@ if [ "$1" = "add" ]; then
                 \"security\":
                 {
                     \"k\" : \"$KI\",
-                    \"op\" : \"$OP\",
-                    \"opc\" : null,
+                    \"op\" : null,
+                    \"opc\" : \"$OPC\",
                     \"amf\" : \"8000\",
                 },
                 \"ambr\" :

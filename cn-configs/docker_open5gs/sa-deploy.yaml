@@ -367,7 +367,8 @@ services:
     # cpus: 1.0
 networks:
   default:
-    name: docker_open5gs_default
+    name: 5g-bridge
+    external: true
     ipam:
       config:
         - subnet: ${TEST_NETWORK}

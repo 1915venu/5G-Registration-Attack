@@ -8,9 +8,9 @@ mnc: 'MNC'
 # Permanent subscription key
 key: 'UE_KI'
 # Operator code (OP or OPC) of the UE
-op: 'UE_OP'
+op: 'UE_OPC'
 # This value specifies the OP type and it can be either 'OP' or 'OPC'
-opType: 'OP'
+opType: 'OPC'
 # Authentication Management Field (AMF) value
 amf: 'UE_AMF'
 # IMEI number of the device. It is used if no SUPI is provided

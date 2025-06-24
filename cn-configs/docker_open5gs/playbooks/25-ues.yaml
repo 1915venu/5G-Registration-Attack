@@ -1,0 +1,38 @@
+#!/home/prateek/Desktop/docker_open5gs/py_3.12.3/bin/ansible-playbook
+
+- name: UE Manager
+  hosts: docker_hosts
+  gather_facts: false
+
+  vars:
+    ue_container_name: nr_ue1
+    bin_path: /UERANSIM/build
+    config_path: /UERANSIM/config
+    component_name: ueransim-ue1
+    num_of_ues: 10
+    sleep_between_runs: 1
+
+  tasks:
+    - name: Run 25 UEs with 1 second gap
+      shell: |
+        docker exec {{ ue_container_name }} /mnt/multi-ue/{{ component_name }}_init.sh
+
+        docker exec {{ ue_container_name }} /bin/bash -c "
+            file_path='/UERANSIM/config/{{ component_name }}.yaml'
+            curr_supi=001010123450001
+        "
+
+        for i in $(seq 1 {{ num_of_ues }});
+        do
+          docker exec {{ ue_container_name }} /bin/bash -c "
+
+            {{ bin_path }}/nr-ue -c \$file_path -i $curr_supi &
+
+            next_supi=$(printf "%015d" $((10#$curr_supi + 1)))
+            curr_supi=$next_supi
+
+            sleep {{ sleep_between_runs }}
+          "
+        done
+
+
